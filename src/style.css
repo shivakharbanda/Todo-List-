@@ -1,0 +1,87 @@
+:root {
+    font-family: 'Alata', sans-serif;
+
+    font-family: 'Montserrat', sans-serif;
+
+    font-family: 'Roboto', sans-serif;
+    font-size: large;
+}
+.content {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    grid-template-rows: 10vh;
+    height: 100vh;
+    margin: -10px;
+}
+
+header, #content-heading {
+	height: 10vh;
+	color: white;
+	background-color: black;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	grid-column-start: 1;
+	grid-column-end: 3;
+}
+
+.sidebar {
+    background-color: black;
+    color: white;
+    grid-row-start: 2;
+    grid-row-end: 5;
+    padding-left: 2vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+}
+
+.home, .project {
+    width: 90%;
+}
+
+.home > h3, .project > h3, button{
+    cursor: pointer;
+    font-weight: 300;
+    margin-bottom: 2vh;
+    
+}
+
+.project {
+    margin-top: 1vh;
+}
+
+hr {
+    width: 100%;
+    margin-left: 0px;
+}
+
+.addNew, .add-task-btn{
+    height: 5vh;
+    width: 75%;
+    border-radius: 50px;
+    color: black;
+    background-color: white;
+    font-size: larger;
+}
+
+.add-task-btn{
+    height: 5vh;
+    width: 25%;
+    border-radius: 50px;
+    color: white;
+    background-color: black;
+    font-size: larger;
+}
+
+#content-heading {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 3vw;
+    border-radius: 10px;
+}
+
+.main-content {
+    margin: 3vw 8vh;
+}
