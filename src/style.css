@@ -14,7 +14,7 @@
     margin: -10px;
 }
 
-header, #content-heading {
+header {
 	height: 10vh;
 	color: white;
 	background-color: black;
@@ -44,7 +44,6 @@ header, #content-heading {
 .home > h3, .project > h3, button{
     cursor: pointer;
     font-weight: 300;
-    margin-bottom: 2vh;
     
 }
 
@@ -57,7 +56,7 @@ hr {
     margin-left: 0px;
 }
 
-.addNew, .add-task-btn{
+.addNew, .add-task-btn, .impBtn, .cancel-btn, .add-task-2-btn{
     height: 5vh;
     width: 75%;
     border-radius: 50px;
@@ -65,23 +64,119 @@ hr {
     background-color: white;
     font-size: larger;
 }
-
-.add-task-btn{
-    height: 5vh;
-    width: 25%;
-    border-radius: 50px;
-    color: white;
+.add-task-btn, .cancel-btn, .add-task-2-btn {
+    width: 10vw;
+    font-size: 100%;
+}
+.cancel-btn, .add-task-2-btn {
     background-color: black;
-    font-size: larger;
+    color: white;
+    margin: auto;
+}
+.content-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+    background-color: black;
+    color: white;
+    padding: 1vh 4vw;
+    border-radius: 50px;
 }
 
-#content-heading {
-    display: flex;
-    justify-content: flex-start;
-    padding-left: 3vw;
-    border-radius: 10px;
+input, label{
+    display: block;
+
+}
+label {
+    font-weight: 100;
+    font-size: smaller;
 }
 
 .main-content {
-    margin: 3vw 8vh;
+    padding:5vh 5vw;
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+    
+    height: 80vh;
+}
+
+#add-task-box {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+    width: 50%;
+    padding: 0px 50px;
+    padding-bottom: 50px;
+    border-radius: 10px;
+    background-color: white;
+    border: 1px solid grey;
+
+}
+
+#detail {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    height: 100px;
+    width: 99%;
+    resize: none;
+}
+#title {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+input, textarea {
+    height: 3vh;
+    border: 1px solid;
+    border-radius: 5px;
+}
+.task-box-header > h1 {
+    margin: 0;
+
+}
+
+.impBtn {
+    height: 100%;
+    width: 25%;
+    font-size: 100%;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    
+}
+.task-box-header {
+	display: flex;
+	grid-column-start: 1;
+	grid-column-end: 3;
+	justify-content: space-between;
+	align-items: center;
+    margin-top: 10px;
+}
+
+.task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2%;
+}
+
+#task-details > * {
+    border: 1px solid black;
+    padding: 10px;
+   
+}
+#task-details  {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2vh;
+    padding-left: 50px;
+    padding-right: 50px;
+    gap: 10px;
+}
+.detail {
+    flex: 2;
+    margin-left: 5%;
+    margin-right: 5%;
+    text-align: center;
 }
