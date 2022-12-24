@@ -1,5 +1,5 @@
+'use strict';
 console.log("working!!!!!!11")
-
 import './style.css';
 import headerTemplate from "./header";
 import sidebarTemplate from "./sidebar";

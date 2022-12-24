@@ -1,4 +1,4 @@
-import list from "./clipboard-check.svg";
+import { divComponent, headComponent} from "./additional";
 
 export default function sidebarTemplate () {
     let sidebar = new divComponent();;
@@ -61,14 +61,3 @@ export default function sidebarTemplate () {
     return sidebar
 }
 
-export class divComponent {
-    constructor  () {
-        return document.createElement("div");
-    }
-}
-
-export class headComponent {
-    constructor (head) {
-        return document.createElement(head);
-    }
-}
