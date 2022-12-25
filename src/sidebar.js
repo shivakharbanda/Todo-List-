@@ -1,23 +1,48 @@
-import { divComponent, headComponent} from "./additional";
+import {divComponent, headComponent, svg} from "./additional";
+import house  from './static/svg/house.svg';
+
+import all_task_svg  from './static/svg/all_task_svg.svg';
+import today_svg  from './static/svg/today_svg.svg';
+import next_7_days_svg  from './static/svg/next_7_days_svg.png';
+import important_svg  from './static/svg/important_svg.png';
+
 
 export default function sidebarTemplate () {
-    let sidebar = new divComponent();;
-    let homeDiv = new divComponent();;
-    let projectDiv = new divComponent();;
+    let sidebar = new divComponent();
+    let homeDiv = new divComponent();
+    let projectDiv = new divComponent();
 
     let homeh1 = new headComponent("h1");
     homeh1.textContent = "Home";
     homeDiv.classList.add("home");
 
+    let homeHeadDiv = new divComponent();
+    homeHeadDiv.classList.add("menu-item");
+
+    let homeIcon = new svg(house);
+    homeIcon.classList.add("menu-list-svg-small");
+
+    homeHeadDiv.appendChild(homeIcon);
+    homeHeadDiv.appendChild(homeh1);
+
+
     let hr = document.createElement("hr");
 
-    homeDiv.appendChild(homeh1);
-   
+    homeDiv.appendChild(homeHeadDiv);
+    homeDiv.appendChild(hr);
+
 
     let homeAllTasks = new headComponent("h3");
     let homeToday = new headComponent("h3");
     let homeNext7 = new headComponent("h3");
     let homeImp = new headComponent("h3");
+
+    let homeChildLabels = [
+        homeAllTasks,
+        homeToday,
+        homeNext7,
+        homeImp
+    ];
 
     homeAllTasks.classList.add("all-task");
     homeToday.classList.add("today");
@@ -28,11 +53,22 @@ export default function sidebarTemplate () {
     homeToday.textContent = "Today";
     homeNext7.textContent = "Next 7 Days";
     homeImp.textContent = "Important";
+    
+    let svgIcons = [
+        all_task_svg,
+        today_svg,
+        next_7_days_svg,
+        important_svg,
+    ];
 
-    homeDiv.appendChild(homeAllTasks)
-    homeDiv.appendChild(homeToday)
-    homeDiv.appendChild(homeNext7)
-    homeDiv.appendChild(homeImp)
+    homeDiv = createListItemDiv(homeDiv, svgIcons, homeChildLabels);
+
+    
+
+    // homeDiv.appendChild(homeAllTasks)
+    // homeDiv.appendChild(homeToday)
+    // homeDiv.appendChild(homeNext7)
+    // homeDiv.appendChild(homeImp)
 
     
     sidebar.appendChild(homeDiv);
@@ -45,6 +81,8 @@ export default function sidebarTemplate () {
     projectDiv.appendChild(projectH1);
     
     let hr1 = document.createElement("hr");
+
+    projectDiv.appendChild(hr1);
 
     projectDiv.classList.add("project");
 
@@ -59,5 +97,22 @@ export default function sidebarTemplate () {
     sidebar.appendChild(projectDiv);
 
     return sidebar
-}
+};
 
+function createListItemDiv(parent, svgList, listItem) {
+    for(let i = 0; i < svgList.length; i ++) {
+        const divItem = new divComponent();
+        divItem.classList.add("menu-item");
+
+        let menuIcon = new svg(svgList[i]);
+        menuIcon.classList.add("menu-list-svg-small");
+        
+        divItem.appendChild(menuIcon);
+        divItem.appendChild(listItem[i]);
+        
+        parent.appendChild(divItem);
+
+    };
+
+    return parent;
+};

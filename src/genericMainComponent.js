@@ -1,5 +1,6 @@
 import {divComponent, headComponent, radioBtnDiv, StarBtnDiv, heading1} from "./additional";
 
+
 export default function genericMain () {
     let content = new divComponent;
     content.classList.add("main-content");

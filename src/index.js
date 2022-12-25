@@ -1,14 +1,12 @@
 'use strict';
 console.log("working!!!!!!11")
 import './style.css';
-import headerTemplate from "./header";
-import sidebarTemplate from "./sidebar";
-import genericMain from "./genericMainComponent";
 
+import { generateUi, eventListeners } from './displayController';
 
 
 let content = document.querySelector(".content");
 
-content.appendChild(headerTemplate());
-content.appendChild(sidebarTemplate());
-content.appendChild(genericMain());
+content = generateUi(content);
+
+eventListeners();

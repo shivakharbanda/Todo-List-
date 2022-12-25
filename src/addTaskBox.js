@@ -1,10 +1,14 @@
-import { divComponent, headComponent } from "./additional";
+import { divComponent, headComponent, heading1 } from "./additional";
 
 
 
-export function addTaskBox() {
+export default function addTaskBox() {
+
+    let outsideBox = new divComponent();
+    outsideBox.classList.add("outside-box");
 
     let taskBox = new divComponent();
+    taskBox.classList.add("add-task-box");
 
     let fields = [
         {
@@ -69,9 +73,12 @@ export function addTaskBox() {
     let head = new heading1();
     head.textContent = "Task";
 
-    let impBtn = document.createElement("button");
-    impBtn.classList.add("impBtn");
-    impBtn.textContent = "Importent";
+    let impBtn = document.createElement("div");
+    impBtn.textContent = "☆"
+    impBtn.classList.add("star-white");
+    impBtn.classList.add("star")
+    impBtn.setAttribute("id", "impBtn");
+    impBtn.dataset.value = "false";
 
     let taskBoxHeader = new divComponent();
 
@@ -96,6 +103,9 @@ export function addTaskBox() {
     taskBox.appendChild(addtaskBtn);
     taskBox.appendChild(cancelBtn);
 
-    return taskBox;
+    outsideBox.appendChild(taskBox);
+
+
+    return outsideBox;
     
 }
