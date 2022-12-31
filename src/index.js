@@ -6,7 +6,7 @@ import { generateUi, eventListeners } from './displayController';
 
 
 let content = document.querySelector(".content");
+content.dataset.count = 0
 
-content = generateUi(content);
+content = generateUi(content, "All Tasks");
 
-eventListeners();

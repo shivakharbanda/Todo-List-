@@ -26,7 +26,8 @@ export function radioBtnDiv() {
 }
 export function StarBtnDiv(important) {
     let starBtn = new divComponent();
-    important?starBtn.classList.add("important-star"):starBtn.classList.add("star-white");
+    console.log(important);
+    important == "true"?"":starBtn.classList.add("star-white");
     starBtn.classList.add("star");
      
     return starBtn 
@@ -65,4 +66,47 @@ export function switchElement() {
 
     return switchEle;
 
+}
+
+export function validateForm(formId){
+    let fieldList = [... document.querySelectorAll(formId)];
+
+    let valueObjects = {};
+
+    fieldList.every(field => {
+        if (field.tagName != "DIV") {
+            if (field.required) {
+                if ((field.value).length == 0){
+                    field.setCustomValidity(`this field can't be empty`);
+                    field.classList.add("error");
+                    return;
+                }
+                if (field.minLength != "-1") {
+                    if ((field.value).length < field.minLength) {
+                        field.setCustomValidity(`Too short! length should be greater than ${field.minLength}`)
+                        field.classList.add("error");
+                        return;
+                    } else {
+                        field.classList.remove("error");
+                        field.classList.add("valid");
+                        return;
+                    }
+                } 
+                if (field.maxLength != "-1") {
+                    if ((field.value).length > field.maxLength) {
+                        field.setCustomValidity(`Too Long! length should be greater than ${field.maxLength}`)
+                        field.classList.add("error");
+                        return;
+                    }else {
+                        field.classList.remove("error");
+                        field.classList.add("valid");
+                        return;
+                    }
+                }
+
+            } 
+        } else { return }
+    });
+
+    return valueObjects;
 }

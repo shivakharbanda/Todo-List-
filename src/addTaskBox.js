@@ -1,4 +1,4 @@
-import { divComponent, headComponent, heading1 } from "./additional";
+import { divComponent, headComponent, heading1, validateForm } from "./additional";
 
 
 
@@ -28,7 +28,7 @@ export default function addTaskBox() {
             minLength: 3,
             maxLength: 350,
             required: false
-        },
+        },  
     ];
 
     let div1 = new divComponent();
@@ -38,12 +38,13 @@ export default function addTaskBox() {
     let label = document.createElement("label");
     label.textContent = `${fields[0].name}`;
     label.for = fields[0].name;
-    let input = document.createElement("input");
-    input.id = fields[0].id;
-    input.placeholder = fields[0].placeholder;
-    input.minLength = fields[0].minLength;
-    input.maxLength = fields[0].maxLength;
-    input.setAttribute('required', '')
+    let input0 = document.createElement("input");
+    input0.id = fields[0].id;
+    input0.classList.add(fields[0].id);
+    input0.placeholder = fields[0].placeholder;
+    input0.minLength = fields[0].minLength;
+    input0.maxLength = fields[0].maxLength;
+    input0.setAttribute('required', '')
 
     let label1 = document.createElement("label");
     label1.textContent = `${fields[1].name}`;
@@ -51,6 +52,7 @@ export default function addTaskBox() {
     let input1 = document.createElement("textarea");
     input1.id = fields[1].id;
     input1.placeholder = fields[1].placeholder;
+    input1.classList.add(fields[1].id)
     input1.minLength = fields[1].minLength;
     input1.maxLength = fields[1].maxLength;
     input1.setAttribute('required', '')
@@ -60,11 +62,12 @@ export default function addTaskBox() {
     label2.textContent = `Date`;
     label2.for = "date";
     let input2 = document.createElement("input");
+    input2.classList.add(label2.for);
     input2.id = "date";
     input2.type = "date";
 
     //div1.appendChild(label);
-    div1.appendChild(input);
+    div1.appendChild(input0);
     //div2.appendChild(label1);
     div2.appendChild(input1);
     //div3.appendChild(label2);
@@ -82,14 +85,37 @@ export default function addTaskBox() {
 
     let taskBoxHeader = new divComponent();
 
+    impBtn.classList.add("form-field-validate");
+    input0.classList.add("form-field-validate");
+    input2.classList.add("form-field-validate");
+    input1.classList.add("form-field-validate");
+
+    impBtn.addEventListener("blur", () => {
+        validateForm(`.${impBtn.classList[0]}`);
+    });
+    input0.addEventListener("blur", () => {
+        validateForm(`.${input0.classList[0]}`);
+    });
+    input2.addEventListener("blur", () => {
+        validateForm(`.{input2.classList[0]}`);
+    });
+    input1.addEventListener("blur", () => {
+        validateForm(`.${input1.classList[0]}`);
+    });
+    
+
     taskBoxHeader.appendChild(head);
     taskBoxHeader.appendChild(impBtn);
     taskBoxHeader.classList.add("task-box-header");
 
+    
+
     taskBox.appendChild(taskBoxHeader);
-    taskBox.appendChild(input);
+    taskBox.appendChild(input0);
     taskBox.appendChild(input2);
     taskBox.appendChild(input1);
+
+    
    
     let cancelBtn = document.createElement("button");
     let addtaskBtn = document.createElement("button");

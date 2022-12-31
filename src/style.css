@@ -151,11 +151,13 @@ label {
 	right: 50%;
 }
 #detail {
-    grid-column-start: 1;
-    grid-column-end: 3;
-    height: 100px;
-    width: 99%;
-    resize: none;
+	grid-column-start: 1;
+	grid-column-end: 3;
+	height: 100px;
+	width: 99%;
+	resize: none;
+	margin: 0px;
+    text-align: start;
 }
 
 #title {
@@ -347,4 +349,20 @@ input:checked+.slider:before {
 .menu-list-svg-small {
     height: 3vh;
     width: auto;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline: none;
+    border: 2px solid purple
+}
+
+
+.valid {
+    border: 1px solid green;
+}
+
+.error {
+    border: 1px solid red;
 }

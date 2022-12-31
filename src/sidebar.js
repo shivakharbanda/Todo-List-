@@ -49,11 +49,21 @@ export default function sidebarTemplate () {
     homeNext7.classList.add("next-7");
     homeImp.classList.add("imp");
 
+    homeAllTasks.classList.add("sidebar-home-tab");
+    homeToday.classList.add("sidebar-home-tab");
+    homeNext7.classList.add("sidebar-home-tab");
+    homeImp.classList.add("sidebar-home-tab");
+
     homeAllTasks.textContent = "All Tasks";
     homeToday.textContent = "Today";
     homeNext7.textContent = "Next 7 Days";
     homeImp.textContent = "Important";
     
+    homeAllTasks.dataset.value = "All Tasks";
+    homeToday.dataset.value= "Today";
+    homeNext7.dataset.value= "Next 7 Days";
+    homeImp.dataset.value= "Important";
+
     let svgIcons = [
         all_task_svg,
         today_svg,

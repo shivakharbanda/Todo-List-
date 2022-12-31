@@ -1,26 +1,30 @@
 import {divComponent, headComponent, radioBtnDiv, StarBtnDiv, heading1} from "./additional";
 
 
-export default function genericMain () {
+export default function genericMain (project_name) {
     let content = new divComponent;
     content.classList.add("main-content");
 
     let contentHeader = new divComponent();
     let headDiv = new heading1();
 
-    headDiv.textContent = "All Tasks";
+    headDiv.textContent = project_name;
+
     headDiv.id = "content-heading";
 
     contentHeader.appendChild(headDiv);
     contentHeader.classList.add("content-header");
 
-    let addTaskBtn = new headComponent("button");
+    if (project_name == "All Tasks" || project_name == "Today" || project_name == "Next 7 Days" || project_name == "Important") {
+        //do nothing
+    } else {
+        let addTaskBtn = new headComponent("button");
 
-    addTaskBtn.classList.add("add-task-btn");
-    addTaskBtn.textContent = "+ Add Task"
-
-    contentHeader.appendChild(addTaskBtn);
-
+        addTaskBtn.classList.add("add-task-btn");
+        addTaskBtn.textContent = "+ Add Task"
+    
+        contentHeader.appendChild(addTaskBtn);
+    }
     content.appendChild(contentHeader);
 
 
