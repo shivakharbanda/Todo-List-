@@ -58,7 +58,7 @@ button {
 
 .project> .project-list > .full-tab > .project-item-part-2 > h3,
 .svg-btn-edit {
-    word-break: break-all;
+    word-break: break-word;
     cursor: pointer;
 }
 
@@ -386,7 +386,7 @@ textarea:focus{
 }
 
 .project-list {
-    height: 400px;
+    max-height: 400px;
     overflow-y: scroll;
 }
 
@@ -399,6 +399,7 @@ textarea:focus{
 	display: flex;
 	align-items: center;
 	gap: 0px;
+	height: 50px;
 }
 .project-icons {
 	gap: 11px;
@@ -414,8 +415,19 @@ textarea:focus{
 }
 
 .project-icon-small {
-    height: 3vh;
-    width: auto;
-    cursor: pointer;
+	height: 4vh;
+	width: auto;
+	cursor: pointer;
 }
 
+
+.confirmation-box > h2 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.edit-input {
+	height: 3vh;
+	width: 70%;
+	margin: 0px 0.5vw;
+}

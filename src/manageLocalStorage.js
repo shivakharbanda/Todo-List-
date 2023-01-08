@@ -59,6 +59,18 @@ export function deleteProjectItem(itemName) {
     }
 }
 
+export function editKey(oldKey, newKey) {
+    let projectsStr = fetchProjects();
+
+    let projectsSplit = projectsStr.split(oldKey);
+
+    if (projectsSplit.length == 2) {
+        projectsStr = projectsSplit[0] + `${newKey}` + projectsSplit[1];
+    }
+    
+    updateLocalStroageProjectDict(stringToObject(projectsStr));
+}
+
 // code to append todos inside their respective projects
 
 // this code is to convert string to obj and obj to string

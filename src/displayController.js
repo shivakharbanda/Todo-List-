@@ -6,11 +6,12 @@ import addTaskBox from "./addTaskBox";
 import { appendTask, createTask } from "./task";
 import { divComponent, headComponent, heading1, svg, validateForm } from "./additional";
 import addNewProjectBox from "./addNewProjectBox";
-import { appendToProjectsDict, createProject, deleteProjectItem, fetchProjects, getProjectListObj } from "./manageLocalStorage";
+import { appendToProjectsDict, createProject, deleteProjectItem, editKey, fetchProjects, getProjectListObj } from "./manageLocalStorage";
 import project_icon  from './static/svg/project-icon.svg';
 import delete_svg from './static/svg/trash-fill.svg';
-import edit_svg from './static/svg/pencil-square.svg';
-
+import edit_svg from './static/svg/pencil-square.svg'; 
+import enter_svg from './static/svg/enter_svg.svg'; 
+import cancel_svg from './static/svg/cancel_svg.svg';
 
 
 export function generateUi(parent, tab_name) {
@@ -151,23 +152,47 @@ export function populateProjectsTab(){
         projectItem.classList.add("all-task");
         projectItem.classList.add("sidebar-home-tab");
         projectItem.dataset.keyID = projectList[i];
+        projectItem.dataset.value = projectList[i];
         projectItemDivPart2.appendChild(projectItem);
 
-        let editSvg = new svg(edit_svg);
+        let editSvg = new Image;
+
+        editSvg.src = edit_svg;
         
         editSvg.dataset.keyID = projectList[i];
         editSvg.classList.add("project-icon-small");
         editSvg.classList.add("svg-btn-edit");
         editSvg.style = "cursor: pointer;";
 
-        let deleteSvg = new svg(delete_svg);
+
+        editSvg.addEventListener("click", (event)=> {
+            
+            let divToBeReplaced = event.target.parentNode.parentNode;
+
+            let oldKey = event.target.dataset.keyID;
+
+            let editInput = editBox(oldKey);
+            console.log(editInput);
+
+            divToBeReplaced.parentNode.replaceChild(editInput, divToBeReplaced);
+            
+        })
+
+
+        let deleteSvg = new Image;
         
         deleteSvg.dataset.keyID = projectList[i];
         deleteSvg.classList.add("project-icon-small");
         deleteSvg.classList.add("svg-btn-delete");
 
-        deleteSvg.addEventListener("click", ()=> {
-            alert("clicked");
+        deleteSvg.src = delete_svg;
+
+        deleteSvg.addEventListener("click", (event)=> {
+            let confirmationBox = areYouSureBox(event.target.dataset.keyID)
+
+            console.log(confirmationBox);
+
+            document.body.appendChild(confirmationBox)
         })
 
         let projectItemDivPart2_2 = new divComponent();
@@ -196,4 +221,94 @@ export function populateProjectsTab(){
     projectSideBarDiv.appendChild(projectListDiv);
     projectSideBarDiv.appendChild(addProjectBtn());
     eventListeners();
+}
+
+
+function areYouSureBox(projectName) {
+    let outsideBox = new divComponent();
+    outsideBox.classList.add("outside-box");
+
+    let taskBox = new divComponent();
+    taskBox.classList.add("add-task-box");
+    taskBox.classList.add("confirmation-box");
+
+    let sureBoxHeading = new headComponent("h2");
+
+    sureBoxHeading.textContent = `Are you sure you want to delete "${projectName}"? This action can't be reversed.`
+
+    taskBox.appendChild(sureBoxHeading);
+    
+    let cancelBtn = document.createElement("button");
+    let yesBtn = document.createElement("button");
+
+    yesBtn.addEventListener("click", ()=> {
+        deleteProjectItem(projectName);
+        document.querySelector(".outside-box").remove()
+        populateProjectsTab();
+
+    })
+    cancelBtn.addEventListener("click", ()=> {
+        document.querySelector(".outside-box").remove();
+    })
+    
+
+    cancelBtn.classList.add("cancel-btn");
+    yesBtn.classList.add("add-task-2-btn");
+
+    cancelBtn.textContent = "Cancel";
+    yesBtn.textContent = "Yes";
+
+    taskBox.appendChild(yesBtn);
+    taskBox.appendChild(cancelBtn);
+
+    outsideBox.appendChild(taskBox);
+
+
+    return outsideBox;
+}
+
+function editBox(oldKey) {
+    let editDiv = new divComponent();
+    editDiv.classList.add("project-item-part-2");
+
+    let editInput = document.createElement("input");
+
+    editInput.placeholder = oldKey;
+    editInput.classList.add("sidebar-home-tab");
+    editInput.classList.add("edit-input");
+    editInput.maxLength = 20;
+    editInput.minLength = 3;
+
+    let enterSvg = new Image();
+    enterSvg.src = enter_svg;
+    enterSvg.classList.add("project-icon-small");
+    enterSvg.classList.add("svg-btn-enter");
+
+    let cancelSvg = new Image();
+    cancelSvg.src = cancel_svg;
+    cancelSvg.classList.add("project-icon-small");
+    cancelSvg.classList.add("svg-btn-cancel");
+
+    enterSvg.addEventListener("click", (event)=>{
+        let newKey = event.target.parentNode.parentNode.firstChild.value;
+        if (newKey.length >=3 && newKey.length <= 20) {
+            editKey(oldKey, newKey);
+            populateProjectsTab();
+        }
+    })
+
+    cancelSvg.addEventListener("click", ()=>{
+        populateProjectsTab();
+    })
+    let svgDiv = new divComponent();
+    svgDiv.classList.add("project-icons");
+
+    svgDiv.appendChild(enterSvg);
+    svgDiv.appendChild(cancelSvg);
+
+    editDiv.appendChild(editInput);
+    editDiv.appendChild(svgDiv);
+
+    return editDiv;
+
 }
