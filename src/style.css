@@ -9,7 +9,7 @@
 
 .content {
     display: grid;
-    grid-template-columns: 1fr 5fr;
+    grid-template-columns: 1.5fr 6fr;
     grid-template-rows: 10vh;
     height: 100vh;
     margin: -10px;
@@ -37,6 +37,7 @@ header {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    min-width: 1.5fr;
 
 }
 
@@ -46,7 +47,7 @@ header {
 }
 
 .home > .menu-item > h3,
-.project>h3,
+.project> .project-list > .full-tab > .project-item-part-2 > h3,
 button {
     cursor: pointer;
     font-weight: 300;
@@ -54,6 +55,13 @@ button {
     margin: 1vh;
 
 }
+
+.project> .project-list > .full-tab > .project-item-part-2 > h3,
+.svg-btn-edit {
+    word-break: break-all;
+    cursor: pointer;
+}
+
 
 .menu-item > h1 {
     margin: 1vh;
@@ -68,11 +76,12 @@ hr {
     margin-left: 0px;
 }
 
-.addNew,
+.addNewProject,
 .add-task-btn,
 .impBtn,
 .cancel-btn,
-.add-task-2-btn {
+.add-task-2-btn,
+.add-project-2-btn {
     height: 5vh;
     width: 75%;
     border-radius: 50px;
@@ -83,13 +92,15 @@ hr {
 
 .add-task-btn,
 .cancel-btn,
-.add-task-2-btn {
+.add-task-2-btn,
+.add-project-2-btn  {
     width: 10vw;
     font-size: 100%;
 }
 
 .cancel-btn,
-.add-task-2-btn {
+.add-task-2-btn,
+.add-project-2-btn {
     background-color: black;
     color: white;
     margin: auto;
@@ -132,8 +143,9 @@ label {
     bottom: 0;
     left: 0;
     z-index: 10000;
+    background-color: rgba(128, 128, 128, 0.266);
 }
-.add-task-box {
+.add-task-box, .add-project-box {
 	display: grid;
 	gap: 20px;
 	grid-template-columns: 1fr 1fr;
@@ -149,6 +161,12 @@ label {
 	/* bottom: 18%; */
 	left: 31%;
 	right: 50%;
+}
+.add-project-box > h2 {
+	text-align: center;
+}
+.add-project-box > input {
+	align-self: center;
 }
 #detail {
 	grid-column-start: 1;
@@ -346,7 +364,7 @@ input:checked+.slider:before {
     
 }
 
-.menu-list-svg-small {
+.menu-list-svg-small{
     height: 3vh;
     width: auto;
 }
@@ -366,3 +384,38 @@ textarea:focus{
 .error {
     border: 1px solid red;
 }
+
+.project-list {
+    height: 400px;
+    overflow-y: scroll;
+}
+
+.full-tab, .project-item-part-2 {
+    display: flex;
+    align-items: center;
+    
+}
+.full-tab {
+	display: flex;
+	align-items: center;
+	gap: 0px;
+}
+.project-icons {
+	gap: 11px;
+	display: flex;
+	/* align-items: flex-start; */
+	padding-right: 19px;
+}
+.project-item-part-2 {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex: 1;
+}
+
+.project-icon-small {
+    height: 3vh;
+    width: auto;
+    cursor: pointer;
+}
+

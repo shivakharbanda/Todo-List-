@@ -1,14 +1,14 @@
 // this code is to create and edit projects in local stroage
 
-function setupProjectDict() {
+export function setupProjectDict() {
     if (fetchProjects() == null) {
         localStorage.setItem("projects", "{}");
     }
 }
 
-function createProject(projectName) {
+export function createProject(projectName) {
     if (checkIfProjectExist()) {
-        projectsObj = appendToProjectsDict(projectName)
+        let projectsObj = appendToProjectsDict(projectName)
         updateLocalStroageProjectDict(projectsObj)
 
     } else {
@@ -46,6 +46,18 @@ function fetchProjects() {
     return localStorage.getItem("projects");
 }
 
+export function getProjectListObj() {
+    return Object.keys(stringToObject(fetchProjects()));
+}
+
+export function deleteProjectItem(itemName) {
+    let projectsObj = stringToObject(fetchProjects());
+
+    if (projectsObj[itemName] != undefined) {
+        delete projectsObj[itemName];
+        updateLocalStroageProjectDict(projectsObj);
+    }
+}
 
 // code to append todos inside their respective projects
 

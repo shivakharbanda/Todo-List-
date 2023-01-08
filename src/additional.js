@@ -80,29 +80,32 @@ export function validateForm(formId){
                     field.setCustomValidity(`this field can't be empty`);
                     field.classList.add("error");
                     return;
-                }
-                if (field.minLength != "-1") {
-                    if ((field.value).length < field.minLength) {
-                        field.setCustomValidity(`Too short! length should be greater than ${field.minLength}`)
-                        field.classList.add("error");
-                        return;
-                    } else {
-                        field.classList.remove("error");
-                        field.classList.add("valid");
-                        return;
+                } else {
+                    if (field.minLength != "-1") {
+                        if ((field.value).length < field.minLength) {
+                            field.setCustomValidity(`Too short! length should be greater than ${field.minLength}`)
+                            field.classList.add("error");
+                            return;
+                        } else {
+                            field.classList.remove("error");
+                            field.classList.add("valid");
+                            return;
+                        }
+                    } 
+                    if (field.maxLength != "-1") {
+                        if ((field.value).length > field.maxLength) {
+                            field.setCustomValidity(`Too Long! length should be greater than ${field.maxLength}`)
+                            field.classList.add("error");
+                            field.classList.remove("valid");
+                            return;
+                        }else {
+                            field.classList.remove("error");
+                            field.classList.add("valid");
+                            return;
+                        }
                     }
-                } 
-                if (field.maxLength != "-1") {
-                    if ((field.value).length > field.maxLength) {
-                        field.setCustomValidity(`Too Long! length should be greater than ${field.maxLength}`)
-                        field.classList.add("error");
-                        return;
-                    }else {
-                        field.classList.remove("error");
-                        field.classList.add("valid");
-                        return;
-                    }
                 }
+                
 
             } 
         } else { return }

@@ -5,6 +5,7 @@ import all_task_svg  from './static/svg/all_task_svg.svg';
 import today_svg  from './static/svg/today_svg.svg';
 import next_7_days_svg  from './static/svg/next_7_days_svg.png';
 import important_svg  from './static/svg/important_svg.png';
+import { populateProjectsTab } from "./displayController";
 
 
 export default function sidebarTemplate () {
@@ -96,18 +97,23 @@ export default function sidebarTemplate () {
 
     projectDiv.classList.add("project");
 
-    let addNewBtn = document.createElement("button");
-    addNewBtn.classList.add("addNew");
-    addNewBtn.textContent = "+ Add Project"
-
+    let addNewBtn = addProjectBtn();
     projectDiv.appendChild(addNewBtn);
 
 
 
     sidebar.appendChild(projectDiv);
+    
 
     return sidebar
 };
+
+export function addProjectBtn() {
+    let addNewBtn = document.createElement("button");
+    addNewBtn.classList.add("addNewProject");
+    addNewBtn.textContent = "+ Add Project"
+    return addNewBtn;
+}
 
 function createListItemDiv(parent, svgList, listItem) {
     for(let i = 0; i < svgList.length; i ++) {
