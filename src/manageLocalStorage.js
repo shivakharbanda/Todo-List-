@@ -37,12 +37,12 @@ function checkIfProjectExist() {
 function appendToProjectsDict(projectName) {
     let projectsObj = stringToObject(fetchProjects());
 
-    projectsObj[projectName] = {};
+    projectsObj[projectName] = [];
 
     return projectsObj;
 }
 
-function fetchProjects() {
+export function fetchProjects() {
     return localStorage.getItem("projects");
 }
 
@@ -75,8 +75,7 @@ export function editKey(oldKey, newKey) {
 
 export function addTaskToProject(projectName, taskName) {
     let projectObj = stringToObject(fetchProjects());
-
-    (projectObj[projectName])[`${taskName}`] = taskName;
+    (projectObj[projectName]).push(taskName);
 
     updateLocalStroageProjectDict(projectObj);
 }
@@ -88,6 +87,6 @@ function objToString(value) {
     return JSON.stringify(value);
 }
 
-function stringToObject(value) {
+export function stringToObject(value) {
     return JSON.parse(value);
 }

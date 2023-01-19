@@ -3,7 +3,7 @@ import sidebarTemplate, { addProjectBtn } from "./sidebar";
 import genericMain from "./genericMainComponent";
 
 import addTaskBox from "./addTaskBox";
-import { appendTask, createTask } from "./task";
+import { appendTask, createTask, populateTasks } from "./task";
 import { divComponent, headComponent, heading1, svg, validateForm } from "./additional";
 import addNewProjectBox from "./addNewProjectBox";
 import { addTaskToProject, appendToProjectsDict, createProject, deleteProjectItem, editKey, fetchProjects, getProjectListObj } from "./manageLocalStorage";
@@ -48,6 +48,8 @@ export function eventListeners() {
 
             updateContentBar(event.target.dataset.value);
             if (event.target.dataset.type == "project"){
+                
+                populateTasks(event.target.dataset.value)
                 document.querySelector(".add-task-btn").addEventListener("click", (event)=>{
                         let projectName = event.target.parentNode.firstChild.textContent;
                         
@@ -322,5 +324,10 @@ function editBox(oldKey) {
     editDiv.appendChild(svgDiv);
 
     return editDiv;
+
+}
+
+export function replaceDomElements(parent, newItem, oldItem){
+    parent.replaceChild(newItem, oldItem);
 
 }

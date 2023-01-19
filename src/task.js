@@ -1,4 +1,6 @@
 import { divComponent, headComponent, radioBtnDiv, StarBtnDiv } from "./additional";
+import { replaceDomElements } from "./displayController";
+import { fetchProjects, stringToObject } from "./manageLocalStorage";
 
 let task = (id, project, title, detail, important, date, completed) => {
     return {
@@ -21,6 +23,38 @@ export function createTask (id, project = "default", title, detail, important, d
 export function appendTask(task) {
     let tasksDiv = document.getElementById("task-details");
 
+    let taskComponent = createTaskComponent(task)
+
+    tasksDiv.appendChild(taskComponent);
+    
+}
+export function populateTasks(projectName) {
+    let projectObj = stringToObject(fetchProjects());
+
+    let selectedProject = projectObj[projectName];
+
+    let taskListDiv = new divComponent();
+
+    let projectTaskList = projectObj[projectName]
+
+    projectTaskList.forEach(element => {
+        const taskComponent = createTaskComponent(element);
+        taskListDiv.appendChild(taskComponent);
+    });
+
+    taskListDiv.id = "task-details";
+
+    let parentNode = document.querySelector("#task-details").parentNode;
+    let newItem = taskListDiv;
+    let oldItem = document.querySelector("#task-details")
+
+    replaceDomElements(parentNode, newItem, oldItem);
+
+}
+
+
+
+function createTaskComponent(task) {
     let taskComponent = new divComponent();
     taskComponent.dataset.taskId = task.id
     taskComponent.classList.add("task");
@@ -45,6 +79,5 @@ export function appendTask(task) {
     taskComponent.appendChild(dueDate);
     taskComponent.appendChild(important);
 
-    tasksDiv.appendChild(taskComponent);
-    
+    return taskComponent;
 }
