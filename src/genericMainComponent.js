@@ -1,4 +1,6 @@
 import {divComponent, headComponent, radioBtnDiv, StarBtnDiv, heading1} from "./additional";
+import addTaskBox from "./addTaskBox";
+import { appendTask, createTask } from "./task";
 
 
 export default function genericMain (project_name) {
@@ -22,7 +24,7 @@ export default function genericMain (project_name) {
 
         addTaskBtn.classList.add("add-task-btn");
         addTaskBtn.textContent = "+ Add Task"
-    
+
         contentHeader.appendChild(addTaskBtn);
     }
     content.appendChild(contentHeader);

@@ -2,13 +2,14 @@ import { divComponent, headComponent, heading1, validateForm } from "./additiona
 
 
 
-export default function addTaskBox() {
+export default function addTaskBox(projectNameValue) {
 
     let outsideBox = new divComponent();
     outsideBox.classList.add("outside-box");
 
     let taskBox = new divComponent();
     taskBox.classList.add("add-task-box");
+    taskBox.dataset.projectName = projectNameValue;
 
     let fields = [
         {
@@ -97,7 +98,7 @@ export default function addTaskBox() {
         validateForm(`.${input0.classList[0]}`);
     });
     input2.addEventListener("blur", () => {
-        validateForm(`.{input2.classList[0]}`);
+        validateForm(`.${input2.classList[0]}`);
     });
     input1.addEventListener("blur", () => {
         validateForm(`.${input1.classList[0]}`);
@@ -130,8 +131,7 @@ export default function addTaskBox() {
     taskBox.appendChild(cancelBtn);
 
     outsideBox.appendChild(taskBox);
-
-
+    
     return outsideBox;
     
 }

@@ -73,6 +73,15 @@ export function editKey(oldKey, newKey) {
 
 // code to append todos inside their respective projects
 
+export function addTaskToProject(projectName, taskName) {
+    let projectObj = stringToObject(fetchProjects());
+
+    (projectObj[projectName])[`${taskName}`] = taskName;
+
+    updateLocalStroageProjectDict(projectObj);
+}
+
+
 // this code is to convert string to obj and obj to string
 
 function objToString(value) {

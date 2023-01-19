@@ -4,7 +4,7 @@ import house  from './static/svg/house.svg';
 import all_task_svg  from './static/svg/all_task_svg.svg';
 import today_svg  from './static/svg/today_svg.svg';
 import next_7_days_svg  from './static/svg/next_7_days_svg.png';
-import important_svg  from './static/svg/important_svg.png';
+import important_svg  from './static/svg/important_svg.svg';
 import { populateProjectsTab } from "./displayController";
 
 
