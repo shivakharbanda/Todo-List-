@@ -113,3 +113,8 @@ export function validateForm(formId){
 
     return valueObjects;
 }
+
+
+export function idGenerator() {
+    
+}

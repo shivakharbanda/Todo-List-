@@ -31,13 +31,16 @@ export function appendTask(task) {
 export function populateTasks(projectName) {
     let projectObj = stringToObject(fetchProjects());
 
-    let selectedProject = projectObj[projectName];
+    // let selectedProject = projectObj[projectName];
 
     let taskListDiv = new divComponent();
+    let projectTaskObj = projectObj[projectName]["tasks"]
 
-    let projectTaskList = projectObj[projectName]
+    let projectTaskListOfKeys = Object.keys(projectTaskObj)
 
-    projectTaskList.forEach(element => {
+    
+    projectTaskListOfKeys.forEach(element => {
+        let task = projectTaskObj[element];
         const taskComponent = createTaskComponent(element);
         taskListDiv.appendChild(taskComponent);
     });

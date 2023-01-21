@@ -3,6 +3,7 @@
 export function setupProjectDict() {
     if (fetchProjects() == null) {
         localStorage.setItem("projects", "{}");
+        localStorage.setItem("projectId", "0");
     }
 }
 
@@ -10,11 +11,24 @@ export function createProject(projectName) {
     if (checkIfProjectExist()) {
         let projectsObj = appendToProjectsDict(projectName)
         updateLocalStroageProjectDict(projectsObj)
+        updateProjectId()
 
     } else {
         return 
     }
 
+}
+
+function getProjectId() {
+   
+    let projectId = Number(localStorage.getItem("projectId"));
+    return projectId
+
+}
+
+function updateProjectId() {
+   let projectIdNum =  Number(localStorage.getItem("projectId")) + 1;
+   localStorage.setItem("projectId", `${projectIdNum}`);
 }
 
 function updateLocalStroageProjectDict(project_obj) {
@@ -36,8 +50,13 @@ function checkIfProjectExist() {
 
 function appendToProjectsDict(projectName) {
     let projectsObj = stringToObject(fetchProjects());
+    let projectIdNum = getProjectId() + 1;
 
-    projectsObj[projectName] = [];
+    projectsObj[projectName] = {
+        projectId : projectIdNum, 
+        taskId : 0,
+        tasks : {}
+    };
 
     return projectsObj;
 }
@@ -73,13 +92,34 @@ export function editKey(oldKey, newKey) {
 
 // code to append todos inside their respective projects
 
-export function addTaskToProject(projectName, taskName) {
+export function addTaskToProject(projectName, task) {
     let projectObj = stringToObject(fetchProjects());
-    (projectObj[projectName]).push(taskName);
+    
+    let taskId = getCurrentTaskId(projectName)
+    
+    (projectObj[projectName])["tasks"][taskId] = task;
+
+    updateLocalStroageProjectDict(projectObj);
+
+    projectObj = updatetaskId(projectName);
 
     updateLocalStroageProjectDict(projectObj);
 }
 
+function updatetaskId(projectName) {
+    let currentTaskId = getCurrentTaskId(projectName);
+    let projectObj = stringToObject(fetchProjects());
+
+    (projectObj[projectName])["taskId"] = currentTaskId + 1;
+
+    return projectObj
+}
+
+function getCurrentTaskId(projectName) {
+    let projectsObj = stringToObject(fetchProjects());
+    return (projectsObj[projectName])["taskId"];
+
+}
 
 // this code is to convert string to obj and obj to string
 
