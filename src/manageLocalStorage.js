@@ -143,6 +143,22 @@ export function deleteTask(taskId, projectId) {
     updateLocalStroageProjectDict(projectObj)
 }
 
+export function getTaskById(projectID, taskID) {
+    let projectObj = stringToObject(fetchProjects());
+
+    let project = projectObj[projectID];
+    let task = project["tasks"][taskID];
+
+    return task
+}
+
+export function updateTaskById(projectID, taskID, task){
+    let projectObj = stringToObject(fetchProjects());
+
+    projectObj[projectID]["tasks"][taskID] = task;
+    updateLocalStroageProjectDict(projectObj);
+}
+
 // this code is to convert string to obj and obj to string
 
 function objToString(value) {

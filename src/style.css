@@ -81,7 +81,8 @@ hr {
 .impBtn,
 .cancel-btn,
 .add-task-2-btn,
-.add-project-2-btn {
+.add-project-2-btn,
+#editBtn {
     height: 5vh;
     width: 75%;
     border-radius: 50px;
@@ -93,14 +94,16 @@ hr {
 .add-task-btn,
 .cancel-btn,
 .add-task-2-btn,
-.add-project-2-btn {
+.add-project-2-btn,
+#editBtn {
     width: 10vw;
     font-size: 100%;
 }
 
 .cancel-btn,
 .add-task-2-btn,
-.add-project-2-btn {
+.add-project-2-btn,
+#editBtn {
     background-color: black;
     color: white;
     margin: auto;

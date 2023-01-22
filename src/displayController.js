@@ -2,11 +2,11 @@ import headerTemplate from "./header";
 import sidebarTemplate, { addProjectBtn } from "./sidebar";
 import genericMain from "./genericMainComponent";
 
-import addTaskBox from "./addTaskBox";
+import addTaskBox, { editTaskBox } from "./addTaskBox";
 import { appendTask, createTask, populateTasks } from "./task";
 import { divComponent, getCurrentProjectId, headComponent, heading1, svg, validateForm } from "./additional";
 import addNewProjectBox from "./addNewProjectBox";
-import { addTaskToProject, appendToProjectsDict, createProject, deleteProjectItem, deleteTask, editKey, fetchProjects, getProjectIdByName, getProjectListObj, getProjectNameById } from "./manageLocalStorage";
+import { addTaskToProject, appendToProjectsDict, createProject, deleteProjectItem, deleteTask, editKey, fetchProjects, getProjectIdByName, getProjectListObj, getProjectNameById, updateTaskById } from "./manageLocalStorage";
 import project_icon  from './static/svg/project-icon.svg';
 import delete_svg from './static/svg/trash-fill.svg';
 import edit_svg from './static/svg/pencil-square.svg'; 
@@ -385,6 +385,51 @@ export function performAction(taskId, action) {
     } else if (action == "edit") {
         let projectId = getActiveProjectId();
     
-        editBox(projectId, taskId)
-    }
+        let editTaskBoxModal = editTaskBox(projectId, taskId);
+
+        document.body.appendChild(editTaskBoxModal);
+        document.querySelector(".cancel-btn").addEventListener("click", (event)=>{
+            document.querySelector(".outside-box").remove() 
+        }); 
+        let impBtn = document.querySelector("#impBtn");
+        document.querySelector("#impBtn").addEventListener("click", (event)=>{
+            
+            if (impBtn.dataset.value == "true") {
+                impBtn.dataset.value = "false";
+                impBtn.textContent = "☆";
+                
+            } else {
+                impBtn.dataset.value = "true";
+                impBtn.textContent = "⭐";
+            }
+
+            impBtn.classList.toggle("star-white");
+        });
+
+        document.getElementById("editBtn").addEventListener("click", (event)=> {
+            let projectName = event.target.parentNode.dataset.projectName;
+            let title = document.querySelector("#title").value;
+            let date = document.querySelector("#date").value;
+            let detail = document.querySelector("#detail").value;
+            let important = document.querySelector("#impBtn").dataset.value;
+            let id = document.querySelector(".content").dataset.count;
+            let project="default";
+
+            validateForm(".form-field-validate");
+            document.querySelector("#title").reportValidity();
+            document.querySelector("#detail").reportValidity();
+            if ([... document.querySelectorAll(".error")].length > 0) {
+                document.querySelectorAll(".error")[0].focus();
+                return;
+            }
+                                
+            let task = createTask(id, project, title, detail, important, date, "false");
+
+           
+            updateTaskById(projectId, taskId, task);
+            
+            populateTasks(projectId);
+            document.querySelector(".outside-box").remove()
+        })
+}
 }

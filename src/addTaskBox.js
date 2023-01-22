@@ -1,4 +1,5 @@
 import { divComponent, headComponent, heading1, validateForm } from "./additional";
+import { getTaskById } from "./manageLocalStorage";
 
 
 
@@ -135,7 +136,36 @@ export default function addTaskBox(projectNameValue) {
     
 }
 
-export function editTaskBox(projectID, task) {
+export function editTaskBox(projectID, taskID) {
     let taskBox = addTaskBox();
-    debugger;
+    let task = getTaskById(projectID, taskID);
+
+    if (taskBox.querySelector("#impBtn").dataset.value == true) {
+        taskBox.querySelector("#impBtn").textContent = "⭐";
+        taskBox.querySelector("#impBtn").removeAttribute("class");
+        taskBox.querySelector("#impBtn").classList.add("star");
+        taskBox.querySelector("#impBtn").classList.add("form-field-validate");
+        
+    } else {
+        taskBox.querySelector("#impBtn").textContent = "☆";
+        taskBox.querySelector("#impBtn").removeAttribute("class");
+        taskBox.querySelector("#impBtn").classList.add("star"); 
+        taskBox.querySelector("#impBtn").classList.add("star-white");
+        taskBox.querySelector("#impBtn").classList.add("form-field-validate");
+    }
+    taskBox.querySelector("#title").value = task.title;
+    taskBox.querySelector("#date").value = task.date;
+    taskBox.querySelector("#detail").value = task.detail;
+
+    taskBox.id = "edit-box";
+    taskBox.dataset.projectId = projectID;
+    taskBox.dataset.taskId = taskID
+
+    let editBtn = taskBox.querySelector(".add-task-2-btn")
+    editBtn.id = "editBtn";
+    editBtn.removeAttribute("class");
+    editBtn.textContent = "Edit Task";
+
+
+    return taskBox;
 }
