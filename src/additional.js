@@ -1,3 +1,6 @@
+import { performAction } from "./displayController";
+import { populateTasks } from "./task";
+
 export class divComponent {
     constructor  () {
         return document.createElement("div");
@@ -114,7 +117,56 @@ export function validateForm(formId){
     return valueObjects;
 }
 
+export function dropDownMenuDiv(dropbtnElement) {
+    let dropDownDiv = new divComponent();
+    dropDownDiv.classList.add("dropdown");
 
-export function idGenerator() {
+    dropbtnElement.classList.add("dropbtn");
+
+    let dropDownOptionsDiv = new divComponent();
+    dropDownOptionsDiv.id = "myDropdown";
+    dropDownOptionsDiv.classList.add("dropdown-content");
+
+    let dropDownOption1 = document.createElement("a");
+    dropDownOption1.textContent = "Edit";
+    dropDownOption1.classList.add("drop-down-ele");
+    dropDownOption1.id = "edit";
+
+    let dropDownOption2 = document.createElement("a");
+    dropDownOption2.textContent = "Delete";
+    dropDownOption2.classList.add("drop-down-ele");
+    dropDownOption2.id = "delete";
+
+    dropDownOptionsDiv.appendChild(dropDownOption1);
+    dropDownOptionsDiv.appendChild(dropDownOption2);
+
+    dropDownDiv.appendChild(dropbtnElement);
+    dropDownDiv.appendChild(dropDownOptionsDiv);
+
+
+    dropDownDiv.addEventListener("click", (event)=> {
+        event.target.parentNode.lastChild.classList.toggle("show");
+        let dropDownOptions = event.target.parentElement.lastChild.childNodes;
+        dropDownOptions.forEach(element => {
+            element.addEventListener("click", (event)=> {
+                let selectedTaskId = event.target.parentElement.parentElement.parentElement.dataset.taskId ;
+                let action = event.target.id;
+                performAction(selectedTaskId, action);
+                let currentProjectId = getCurrentProjectId()
+                populateTasks(currentProjectId)
+                
+
+            })
+        })
+        
+    })
+    
+    
+
+    return dropDownDiv
+}
+
+export function getCurrentProjectId() {
+    return document.getElementById("content-heading").dataset.projectId ;
     
 }

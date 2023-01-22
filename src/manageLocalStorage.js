@@ -18,6 +18,11 @@ export function createProject(projectName) {
     }
 
 }
+export function getProjectNameById(projectId) {
+    let projectObj = stringToObject(fetchProjects());
+
+    return projectObj[projectId]["projectName"];
+}
 
 function getProjectId() {
    
@@ -52,8 +57,8 @@ function appendToProjectsDict(projectName) {
     let projectsObj = stringToObject(fetchProjects());
     let projectIdNum = getProjectId() + 1;
 
-    projectsObj[projectName] = {
-        projectId : projectIdNum, 
+    projectsObj[projectIdNum] = {
+        projectName : projectName, 
         taskId : 0,
         tasks : {}
     };
@@ -63,6 +68,13 @@ function appendToProjectsDict(projectName) {
 
 export function fetchProjects() {
     return localStorage.getItem("projects");
+}
+
+export function getProjectIdByName(projectName) {
+    let projectObj = stringToObject(fetchProjects());
+    
+    return projectObj[projectName]["projectId"];
+
 }
 
 export function getProjectListObj() {
@@ -78,47 +90,57 @@ export function deleteProjectItem(itemName) {
     }
 }
 
-export function editKey(oldKey, newKey) {
-    let projectsStr = fetchProjects();
+export function editKey(projectId, newProjectName) {
+    let projectObj = stringToObject(fetchProjects());
 
-    let projectsSplit = projectsStr.split(oldKey);
+    (projectObj[projectId])["projectName"] = `${newProjectName}`;
 
-    if (projectsSplit.length == 2) {
-        projectsStr = projectsSplit[0] + `${newKey}` + projectsSplit[1];
-    }
-    
-    updateLocalStroageProjectDict(stringToObject(projectsStr));
+    updateLocalStroageProjectDict(projectObj);
 }
 
 // code to append todos inside their respective projects
 
-export function addTaskToProject(projectName, task) {
-    let projectObj = stringToObject(fetchProjects());
-    
-    let taskId = getCurrentTaskId(projectName)
-    
-    (projectObj[projectName])["tasks"][taskId] = task;
+function getCurrentTaskId(projectId) {
+    let projectsObj = stringToObject(fetchProjects());
+    return (projectsObj[projectId])["taskId"];
 
-    updateLocalStroageProjectDict(projectObj);
-
-    projectObj = updatetaskId(projectName);
-
-    updateLocalStroageProjectDict(projectObj);
 }
 
-function updatetaskId(projectName) {
-    let currentTaskId = getCurrentTaskId(projectName);
+export function addTaskToProject(projectId, task) {
+    debugger
     let projectObj = stringToObject(fetchProjects());
 
-    (projectObj[projectName])["taskId"] = currentTaskId + 1;
+    let taskId = getCurrentTaskId(projectId)
+
+    let taskList = (projectObj[projectId])["tasks"]
+    
+    taskList[taskId] = task;
+
+    updateLocalStroageProjectDict(projectObj);
+
+    projectObj = updatetaskId(projectId);
+
+    updateLocalStroageProjectDict(projectObj);
+
+    return taskId
+}
+
+function updatetaskId(projectId) {
+    let currentTaskId = getCurrentTaskId(projectId);
+    let projectObj = stringToObject(fetchProjects());
+
+    (projectObj[projectId])["taskId"] = currentTaskId + 1;
 
     return projectObj
 }
 
-function getCurrentTaskId(projectName) {
-    let projectsObj = stringToObject(fetchProjects());
-    return (projectsObj[projectName])["taskId"];
+export function deleteTask(taskId, projectId) {
+    debugger
+    let projectObj = stringToObject(fetchProjects());
 
+    delete projectObj[projectId]["tasks"][taskId]
+
+    updateLocalStroageProjectDict(projectObj)
 }
 
 // this code is to convert string to obj and obj to string

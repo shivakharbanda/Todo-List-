@@ -30,7 +30,7 @@ export default function addNewProjectBox() {
     addtaskBtn.classList.add("add-project-2-btn");
 
     cancelBtn.textContent = "Cancel";
-    addtaskBtn.textContent = "Add Task";
+    addtaskBtn.textContent = "Add Project";
 
     taskBox.appendChild(addtaskBtn);
     taskBox.appendChild(cancelBtn);

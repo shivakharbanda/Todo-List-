@@ -103,7 +103,6 @@ export default function addTaskBox(projectNameValue) {
     input1.addEventListener("blur", () => {
         validateForm(`.${input1.classList[0]}`);
     });
-    
 
     taskBoxHeader.appendChild(head);
     taskBoxHeader.appendChild(impBtn);
@@ -134,4 +133,9 @@ export default function addTaskBox(projectNameValue) {
     
     return outsideBox;
     
+}
+
+export function editTaskBox(projectID, task) {
+    let taskBox = addTaskBox();
+    debugger;
 }

@@ -4,14 +4,15 @@ import genericMain from "./genericMainComponent";
 
 import addTaskBox from "./addTaskBox";
 import { appendTask, createTask, populateTasks } from "./task";
-import { divComponent, headComponent, heading1, svg, validateForm } from "./additional";
+import { divComponent, getCurrentProjectId, headComponent, heading1, svg, validateForm } from "./additional";
 import addNewProjectBox from "./addNewProjectBox";
-import { addTaskToProject, appendToProjectsDict, createProject, deleteProjectItem, editKey, fetchProjects, getProjectListObj } from "./manageLocalStorage";
+import { addTaskToProject, appendToProjectsDict, createProject, deleteProjectItem, deleteTask, editKey, fetchProjects, getProjectIdByName, getProjectListObj, getProjectNameById } from "./manageLocalStorage";
 import project_icon  from './static/svg/project-icon.svg';
 import delete_svg from './static/svg/trash-fill.svg';
 import edit_svg from './static/svg/pencil-square.svg'; 
 import enter_svg from './static/svg/enter_svg.svg'; 
 import cancel_svg from './static/svg/cancel_svg.svg';
+
 
 
 export function generateUi(parent, tab_name) {
@@ -26,7 +27,7 @@ export function generateUi(parent, tab_name) {
     return parent;
 }
 
-function updateContentBar(tab_name) {
+function updateContentBar(tab_name, projectIdNum) {
     let content = document.querySelector(".content");
 
     let main_content = document.querySelector(".main-content")
@@ -34,22 +35,58 @@ function updateContentBar(tab_name) {
     content.removeChild(main_content);
     content.appendChild(genericMain(tab_name));
 
+    document.getElementById("content-heading").dataset.projectId = projectIdNum;
 }
 
 export function eventListeners() {
+
+    window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+
     document.querySelector("#mode-switch").addEventListener("click", (event)=>{
         event.stopPropagation();
         alert("someone clicked me and i didnt like it");
     });
+    
 
     [... document.querySelectorAll(".sidebar-home-tab")].forEach(element => {
 
         element.addEventListener("click", (event) => {
 
-            updateContentBar(event.target.dataset.value);
+            updateContentBar(event.target.dataset.value, event.target.dataset.projectId);
             if (event.target.dataset.type == "project"){
                 
-                populateTasks(event.target.dataset.value)
+                populateTasks(event.target.dataset.projectId)
+                // document.querySelectorAll(".dropdown").forEach(element => {
+                //     element.addEventListener("click", (event)=> {
+                //         event.target.parentNode.lastChild.classList.toggle("show");
+                //         let dropDownOptions = event.target.parentElement.lastChild.childNodes;
+                //         dropDownOptions.forEach(element => {
+                //             element.addEventListener("click", (event)=> {
+                //                 let selectedTaskId = event.target.parentElement.parentElement.parentElement.dataset.taskId ;
+                //                 let action = event.target.id;
+                //                 performAction(selectedTaskId, action);
+                //                 let currentProjectId = getCurrentProjectId()
+                //                 populateTasks(currentProjectId)
+                                
+
+                //             })
+                //         })
+                        
+                //     })
+                // });
+                
+
                 document.querySelector(".add-task-btn").addEventListener("click", (event)=>{
                         let projectName = event.target.parentNode.firstChild.textContent;
                         
@@ -90,11 +127,13 @@ export function eventListeners() {
                             }
                                                 
                             let task = createTask(id, project, title, detail, important, date, "false");
-                            addTaskToProject(projectName, task)
+
+                            let currentProjectId = getCurrentProjectId();
+                            let taskId = addTaskToProject(currentProjectId, task)
 
                             document.querySelector(".content").dataset.count = Number(id) + 1;
                             
-                            appendTask(task)
+                            appendTask(task, taskId)
                             document.querySelector(".outside-box").remove()
                   
                     }); 
@@ -161,11 +200,11 @@ export function populateProjectsTab(){
 
 
         const projectItem = new headComponent("h3");
-        projectItem.textContent = projectList[i];
+        projectItem.textContent = getProjectNameById(projectList[i]);
         projectItem.classList.add("all-task");
         projectItem.classList.add("sidebar-home-tab");
-        projectItem.dataset.keyID = projectList[i];
-        projectItem.dataset.value = projectList[i];
+        projectItem.dataset.projectId = projectList[i];
+        projectItem.dataset.value = getProjectNameById(projectList[i]);
         projectItem.dataset.type = "project";
         projectItemDivPart2.appendChild(projectItem);
 
@@ -248,7 +287,7 @@ function areYouSureBox(projectName) {
 
     let sureBoxHeading = new headComponent("h2");
 
-    sureBoxHeading.textContent = `Are you sure you want to delete "${projectName}"? This action can't be reversed.`
+    sureBoxHeading.textContent = `Are you sure you want to delete "${getProjectNameById(projectName)}"? This action can't be reversed.`
 
     taskBox.appendChild(sureBoxHeading);
     
@@ -287,7 +326,7 @@ function editBox(oldKey) {
 
     let editInput = document.createElement("input");
 
-    editInput.placeholder = oldKey;
+    editInput.placeholder = getProjectNameById(oldKey);
     editInput.classList.add("sidebar-home-tab");
     editInput.classList.add("edit-input");
     editInput.maxLength = 20;
@@ -304,10 +343,13 @@ function editBox(oldKey) {
     cancelSvg.classList.add("svg-btn-cancel");
 
     enterSvg.addEventListener("click", (event)=>{
-        let newKey = event.target.parentNode.parentNode.firstChild.value;
-        if (newKey.length >=3 && newKey.length <= 20) {
-            editKey(oldKey, newKey);
+        let newProjectName = event.target.parentNode.parentNode.firstChild.value;
+        if (newProjectName.length >=3 && newProjectName.length <= 20) {
+            editKey(oldKey, newProjectName);
             populateProjectsTab();
+            if (document.getElementById("content-heading").dataset.projectId == oldKey) {
+                updateContentBar(newProjectName, oldKey);
+            }
         }
     })
 
@@ -330,4 +372,19 @@ function editBox(oldKey) {
 export function replaceDomElements(parent, newItem, oldItem){
     parent.replaceChild(newItem, oldItem);
 
+}
+
+function getActiveProjectId() {
+    return document.getElementById("content-heading").dataset.projectId
+}
+
+export function performAction(taskId, action) {
+    if (action == "delete") {
+        let projectId = getActiveProjectId();
+        deleteTask(taskId, projectId);
+    } else if (action == "edit") {
+        let projectId = getActiveProjectId();
+    
+        editBox(projectId, taskId)
+    }
 }

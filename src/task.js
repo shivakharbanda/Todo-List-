@@ -1,6 +1,7 @@
-import { divComponent, headComponent, radioBtnDiv, StarBtnDiv } from "./additional";
-import { replaceDomElements } from "./displayController";
+import { divComponent, dropDownMenuDiv, headComponent, radioBtnDiv, StarBtnDiv } from "./additional";
+import { eventListeners, replaceDomElements } from "./displayController";
 import { fetchProjects, stringToObject } from "./manageLocalStorage";
+import option_dots from './static/svg/3_dots.svg';
 
 let task = (id, project, title, detail, important, date, completed) => {
     return {
@@ -20,28 +21,36 @@ export function createTask (id, project = "default", title, detail, important, d
     return task(id, project, title, detail, important, date, completed);
 }
 
-export function appendTask(task) {
+export function appendTask(task, taskId) {
+    
     let tasksDiv = document.getElementById("task-details");
 
-    let taskComponent = createTaskComponent(task)
+    if (taskId) {
+        let taskComponent = createTaskComponent(task, taskId)
+        tasksDiv.appendChild(taskComponent);
+    } else {
+        let taskComponent = createTaskComponent(task)
+        tasksDiv.appendChild(taskComponent);
+    }
+    
 
-    tasksDiv.appendChild(taskComponent);
+    
     
 }
-export function populateTasks(projectName) {
+export function populateTasks(projectId) {
     let projectObj = stringToObject(fetchProjects());
 
     // let selectedProject = projectObj[projectName];
 
     let taskListDiv = new divComponent();
-    let projectTaskObj = projectObj[projectName]["tasks"]
+    let projectTaskObj = projectObj[projectId]["tasks"]
 
     let projectTaskListOfKeys = Object.keys(projectTaskObj)
 
     
     projectTaskListOfKeys.forEach(element => {
         let task = projectTaskObj[element];
-        const taskComponent = createTaskComponent(element);
+        const taskComponent = createTaskComponent(task, element);
         taskListDiv.appendChild(taskComponent);
     });
 
@@ -51,15 +60,17 @@ export function populateTasks(projectName) {
     let newItem = taskListDiv;
     let oldItem = document.querySelector("#task-details")
 
+    
+
     replaceDomElements(parentNode, newItem, oldItem);
 
 }
 
 
 
-function createTaskComponent(task) {
+function createTaskComponent(task, taskIdNum) {
     let taskComponent = new divComponent();
-    taskComponent.dataset.taskId = task.id
+    taskComponent.dataset.taskId = taskIdNum
     taskComponent.classList.add("task");
 
     let radioBtn = radioBtnDiv();
@@ -67,6 +78,17 @@ function createTaskComponent(task) {
     let taskDetail = new headComponent("p");
     let dueDate = new headComponent("p");
     let important = StarBtnDiv(task.important);
+
+    let optionsBtn = new Image();
+    optionsBtn.src = option_dots;
+
+    optionsBtn.classList.add("project-icon-small");
+    optionsBtn.classList.add("svg-btn-cancel");
+
+    let dropDownDivElement = dropDownMenuDiv(optionsBtn);
+
+    
+    
 
     radioBtn.textContent = task.completed == "true"?"✓":""
     taskTitle.textContent = task.title;
@@ -81,6 +103,8 @@ function createTaskComponent(task) {
     taskComponent.appendChild(taskDetail);
     taskComponent.appendChild(dueDate);
     taskComponent.appendChild(important);
+    taskComponent.appendChild(dropDownDivElement);
 
     return taskComponent;
 }
+
