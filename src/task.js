@@ -1,6 +1,6 @@
-import { divComponent, dropDownMenuDiv, headComponent, radioBtnDiv, StarBtnDiv } from "./additional";
+import { divComponent, dropDownMenuDiv, getCurrentProjectId, headComponent, radioBtnDiv, StarBtnDiv } from "./additional";
 import { eventListeners, replaceDomElements } from "./displayController";
-import { fetchProjects, stringToObject } from "./manageLocalStorage";
+import { fetchProjects, getTaskById, stringToObject } from "./manageLocalStorage";
 import option_dots from './static/svg/3_dots.svg';
 
 let task = (id, project, title, detail, important, date, completed) => {
@@ -89,12 +89,15 @@ function createTaskComponent(task, taskIdNum) {
 
     
     
-
+    
     radioBtn.textContent = task.completed == "true"?"✓":""
     taskTitle.textContent = task.title;
     taskDetail.textContent = task.detail;
     dueDate.textContent = task.date;
     important.textContent = task.important == "true"?"⭐":"☆" 
+
+    
+    
     
     taskDetail.classList.add("detail");
 

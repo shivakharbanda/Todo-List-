@@ -6,7 +6,7 @@ import addTaskBox, { editTaskBox } from "./addTaskBox";
 import { appendTask, createTask, populateTasks } from "./task";
 import { divComponent, getCurrentProjectId, headComponent, heading1, svg, validateForm } from "./additional";
 import addNewProjectBox from "./addNewProjectBox";
-import { addTaskToProject, appendToProjectsDict, createProject, deleteProjectItem, deleteTask, editKey, fetchProjects, getProjectIdByName, getProjectListObj, getProjectNameById, updateTaskById } from "./manageLocalStorage";
+import { addTaskToProject, appendToProjectsDict, createProject, deleteProjectItem, deleteTask, editKey, fetchProjects, getProjectIdByName, getProjectListObj, getProjectNameById, toggleCompleted, toggleImportant, updateTaskById } from "./manageLocalStorage";
 import project_icon  from './static/svg/project-icon.svg';
 import delete_svg from './static/svg/trash-fill.svg';
 import edit_svg from './static/svg/pencil-square.svg'; 
@@ -50,6 +50,26 @@ export function eventListeners() {
                     openDropdown.classList.remove('show');
                 }
             }
+        } 
+        if (event.target.classList.contains("radio-btn")) {
+            let selectedBtn = event.target;
+            let taskID = selectedBtn.parentElement.dataset.taskId 
+            let projectID = getActiveProjectId();
+
+            if (toggleCompleted(projectID, taskID)) {
+                populateTasks(projectID);
+            };
+            
+        }
+        if (event.target.classList.contains("star")) {
+            let selectedBtn = event.target;
+            let taskID = selectedBtn.parentElement.dataset.taskId 
+            let projectID = getActiveProjectId();
+
+            if (toggleImportant(projectID, taskID)) {
+                populateTasks(projectID);
+            };
+            
         }
     }
 
@@ -67,24 +87,7 @@ export function eventListeners() {
             if (event.target.dataset.type == "project"){
                 
                 populateTasks(event.target.dataset.projectId)
-                // document.querySelectorAll(".dropdown").forEach(element => {
-                //     element.addEventListener("click", (event)=> {
-                //         event.target.parentNode.lastChild.classList.toggle("show");
-                //         let dropDownOptions = event.target.parentElement.lastChild.childNodes;
-                //         dropDownOptions.forEach(element => {
-                //             element.addEventListener("click", (event)=> {
-                //                 let selectedTaskId = event.target.parentElement.parentElement.parentElement.dataset.taskId ;
-                //                 let action = event.target.id;
-                //                 performAction(selectedTaskId, action);
-                //                 let currentProjectId = getCurrentProjectId()
-                //                 populateTasks(currentProjectId)
-                                
-
-                //             })
-                //         })
-                        
-                //     })
-                // });
+                
                 
 
                 document.querySelector(".add-task-btn").addEventListener("click", (event)=>{

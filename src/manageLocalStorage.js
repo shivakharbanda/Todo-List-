@@ -107,7 +107,6 @@ function getCurrentTaskId(projectId) {
 }
 
 export function addTaskToProject(projectId, task) {
-    debugger
     let projectObj = stringToObject(fetchProjects());
 
     let taskId = getCurrentTaskId(projectId)
@@ -135,7 +134,6 @@ function updatetaskId(projectId) {
 }
 
 export function deleteTask(taskId, projectId) {
-    debugger
     let projectObj = stringToObject(fetchProjects());
 
     delete projectObj[projectId]["tasks"][taskId]
@@ -159,6 +157,26 @@ export function updateTaskById(projectID, taskID, task){
     updateLocalStroageProjectDict(projectObj);
 }
 
+export function toggleCompleted(projectID, taskID) {
+    let projectObj = stringToObject(fetchProjects());
+    if (projectObj[projectID]["tasks"][taskID]["completed"] == "false") {
+        projectObj[projectID]["tasks"][taskID]["completed"] = "true";
+    } else if (projectObj[projectID]["tasks"][taskID]["completed"] == "true") {
+        projectObj[projectID]["tasks"][taskID]["completed"] = "false"
+    }
+    updateLocalStroageProjectDict(projectObj);
+    return true
+}
+export function toggleImportant(projectID, taskID) {
+    let projectObj = stringToObject(fetchProjects());
+    if (projectObj[projectID]["tasks"][taskID]["important"] == "false") {
+        projectObj[projectID]["tasks"][taskID]["important"] = "true";
+    } else if (projectObj[projectID]["tasks"][taskID]["important"] == "true") {
+        projectObj[projectID]["tasks"][taskID]["important"] = "false"
+    }
+    updateLocalStroageProjectDict(projectObj);
+    return true
+}
 // this code is to convert string to obj and obj to string
 
 function objToString(value) {
