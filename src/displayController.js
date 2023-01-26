@@ -71,18 +71,11 @@ export function eventListeners() {
             };
             
         }
-    }
-
-    document.querySelector("#mode-switch").addEventListener("click", (event)=>{
-        event.stopPropagation();
-        alert("someone clicked me and i didnt like it");
-    });
-    
-
-    [... document.querySelectorAll(".sidebar-home-tab")].forEach(element => {
-
-        element.addEventListener("click", (event) => {
-
+        if (event.target.classList.contains("slider")) {
+            event.stopPropagation();
+            alert("someone clicked me and i didnt like it");
+        }
+        if (event.target.classList.contains("sidebar-home-tab")) {
             updateContentBar(event.target.dataset.value, event.target.dataset.projectId);
             if (event.target.dataset.type == "project"){
                 
@@ -118,7 +111,6 @@ export function eventListeners() {
                             let date = document.querySelector("#date").value;
                             let detail = document.querySelector("#detail").value;
                             let important = document.querySelector("#impBtn").dataset.value;
-                            let id = document.querySelector(".content").dataset.count;
                             let project="default";
                 
                             validateForm(".form-field-validate");
@@ -129,12 +121,10 @@ export function eventListeners() {
                                 return;
                             }
                                                 
-                            let task = createTask(id, project, title, detail, important, date, "false");
+                            let task = createTask( project, title, detail, important, date, "false");
 
                             let currentProjectId = getCurrentProjectId();
                             let taskId = addTaskToProject(currentProjectId, task)
-
-                            document.querySelector(".content").dataset.count = Number(id) + 1;
                             
                             appendTask(task, taskId)
                             document.querySelector(".outside-box").remove()
@@ -143,43 +133,33 @@ export function eventListeners() {
             
                 }); 
             };
-            
-        })
-        
-    }); 
+        } 
+        if (event.target.classList.contains("addNewProject")) {
+            let addNewProject = addNewProjectBox();
+            document.body.appendChild(addNewProject);
+            document.querySelector(".cancel-btn").addEventListener("click", (event)=>{
+                document.querySelector(".outside-box").remove() 
+            }); 
 
-    document.querySelector(".addNewProject").addEventListener("click", () => {
-        let addNewProject = addNewProjectBox();
-        document.body.appendChild(addNewProject);
-        document.querySelector(".cancel-btn").addEventListener("click", (event)=>{
-            document.querySelector(".outside-box").remove() 
-        }); 
+            document.querySelector(".add-project-2-btn").addEventListener("click", (event)=>{
+                let projectNameField = document.querySelector("#projectName");
+                console.log(event.target)
 
-        document.querySelector(".add-project-2-btn").addEventListener("click", (event)=>{
-            let projectNameField = document.querySelector("#projectName");
-            console.log(event.target)
-
-            validateForm("#projectName");
-            document.querySelector("#projectName").addEventListener("blur", () => {validateForm("#projectName");}) 
-            if ([... projectNameField.classList].includes("error")){
-                // do nothing
-            } else {
-                createProject(projectNameField.value);
-                document.querySelector(".outside-box").remove()
-                console.log(populateProjectsTab());
-                populateProjectsTab();
-            }
-        })
-
-    });
-    
-    // 
+                validateForm("#projectName");
+                document.querySelector("#projectName").addEventListener("blur", () => {validateForm("#projectName");}) 
+                if ([... projectNameField.classList].includes("error")){
+                    // do nothing
+                } else {
+                    createProject(projectNameField.value);
+                    document.querySelector(".outside-box").remove()
+                    console.log(populateProjectsTab());
+                    populateProjectsTab();
+                }
+            })
+        }
+    }
 }
 
-
-export function updateTaskInProject(projectName, taskName) {
-    return
-}
 
 
 export function populateProjectsTab(){
@@ -415,7 +395,6 @@ export function performAction(taskId, action) {
             let date = document.querySelector("#date").value;
             let detail = document.querySelector("#detail").value;
             let important = document.querySelector("#impBtn").dataset.value;
-            let id = document.querySelector(".content").dataset.count;
             let project="default";
 
             validateForm(".form-field-validate");
@@ -426,7 +405,7 @@ export function performAction(taskId, action) {
                 return;
             }
                                 
-            let task = createTask(id, project, title, detail, important, date, "false");
+            let task = createTask(project, title, detail, important, date, "false");
 
            
             updateTaskById(projectId, taskId, task);

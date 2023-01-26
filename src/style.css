@@ -488,3 +488,13 @@ textarea:focus {
 .show {
     display: block;
 }
+
+.no-due-date {
+    padding: 1vh 1vw;
+    border: 1px solid;
+    font-weight: 400;
+    border-radius: 50px;
+}
+.task > p {
+    padding: 1vh 1vw;
+}

@@ -3,22 +3,26 @@ import { eventListeners, replaceDomElements } from "./displayController";
 import { fetchProjects, getTaskById, stringToObject } from "./manageLocalStorage";
 import option_dots from './static/svg/3_dots.svg';
 
-let task = (id, project, title, detail, important, date, completed) => {
+import { format } from "date-fns";
+
+
+let task = ( project, title, detail, important, date, completed) => {
+
     return {
-        id,
+        
         project,
         title,
         detail,
         completed:completed,
         important: important,
-        date:date
+        date:(date == "")?"":createDate(date)
 
     }
 
 }
 
-export function createTask (id, project = "default", title, detail, important, date, completed) {
-    return task(id, project, title, detail, important, date, completed);
+export function createTask ( project = "default", title, detail, important, date, completed) {
+    return task(project, title, detail, important, date, completed);
 }
 
 export function appendTask(task, taskId) {
@@ -33,7 +37,7 @@ export function appendTask(task, taskId) {
         tasksDiv.appendChild(taskComponent);
     }
     
-
+    eventListeners()
     
     
 }
@@ -93,9 +97,10 @@ function createTaskComponent(task, taskIdNum) {
     radioBtn.textContent = task.completed == "true"?"✓":""
     taskTitle.textContent = task.title;
     taskDetail.textContent = task.detail;
-    dueDate.textContent = task.date;
+    
     important.textContent = task.important == "true"?"⭐":"☆" 
 
+    
     
     
     
@@ -104,10 +109,34 @@ function createTaskComponent(task, taskIdNum) {
     taskComponent.appendChild(radioBtn);
     taskComponent.appendChild(taskTitle);
     taskComponent.appendChild(taskDetail);
-    taskComponent.appendChild(dueDate);
+
+    if (task.date == "") {
+        let noDueDateComponent = noDueDateDiv();
+        taskComponent.appendChild(noDueDateComponent);
+    } else {
+
+        dueDate.textContent = createDate(task.date);
+        taskComponent.appendChild(dueDate);
+    }
+
     taskComponent.appendChild(important);
     taskComponent.appendChild(dropDownDivElement);
 
     return taskComponent;
 }
 
+function noDueDateDiv() {
+    let noDueDateComponent = new divComponent();
+
+    noDueDateComponent.classList.add("no-due-date");
+
+    noDueDateComponent.textContent = "No Due Date";
+
+    return noDueDateComponent;
+}
+
+function createDate(dateDue) {
+    let dueDate = (dateDue).split("-")
+    dueDate = format(new Date(dueDate[2], dueDate[1], dueDate[0]), 'dd-MM-yyyy');
+    return dueDate;
+}
