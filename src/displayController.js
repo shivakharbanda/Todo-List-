@@ -72,7 +72,16 @@ export function eventListeners() {
             let taskID = selectedBtn.parentElement.dataset.taskId 
             let projectID = getActiveProjectId();
 
-            if (toggleCompleted(projectID, taskID)) {
+            if (projectID == "undefined") {
+                debugger;
+                projectID = event.target.parentNode.dataset.ProjectId;
+                toggleCompleted(projectID, taskID)
+                let tabName = document.getElementById("content-heading") 
+                if (tabName.textContent == "All Tasks") {
+                    populateAllTasksOfProject();
+                }
+                
+            } else if (toggleCompleted(projectID, taskID)) {
                 populateTasksOfProject(projectID);
             };
             
