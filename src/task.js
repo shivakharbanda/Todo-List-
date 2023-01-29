@@ -1,6 +1,6 @@
 import { divComponent, dropDownMenuDiv, getCurrentProjectId, headComponent, radioBtnDiv, StarBtnDiv } from "./additional";
 import { eventListeners, replaceDomElements } from "./displayController";
-import { fetchProjects, getTaskById, stringToObject } from "./manageLocalStorage";
+import { fetchProjects, getAllTasks, getTaskById, stringToObject } from "./manageLocalStorage";
 import option_dots from './static/svg/3_dots.svg';
 
 import { format } from "date-fns";
@@ -25,15 +25,12 @@ export function createTask ( project = "default", title, detail, important, date
     return task(project, title, detail, important, date, completed);
 }
 
-export function appendTask(task, taskId) {
+export function appendTask(task, taskId, projectId) {
     
     let tasksDiv = document.getElementById("task-details");
 
     if (taskId) {
-        let taskComponent = createTaskComponent(task, taskId)
-        tasksDiv.appendChild(taskComponent);
-    } else {
-        let taskComponent = createTaskComponent(task)
+        let taskComponent = createTaskComponent(task, taskId, projectId)
         tasksDiv.appendChild(taskComponent);
     }
     
@@ -41,20 +38,26 @@ export function appendTask(task, taskId) {
     
     
 }
-export function populateTasks(projectId) {
+export function populateTasksOfProject(projectId) {
     let projectObj = stringToObject(fetchProjects());
-
-    // let selectedProject = projectObj[projectName];
-
-    let taskListDiv = new divComponent();
     let projectTaskObj = projectObj[projectId]["tasks"]
 
-    let projectTaskListOfKeys = Object.keys(projectTaskObj)
+    CreateAndReplaceTaskComponent(projectTaskObj, projectId)
+}
 
+
+export function CreateAndReplaceTaskComponent(projectTaskObj, projectId)  {
+    let taskListDiv = new divComponent();
+    let projectTaskListOfKeys
+    if (Array.isArray(projectTaskObj)) {
+        projectTaskListOfKeys = projectTaskObj;
+    } else  {
+        projectTaskListOfKeys = Object.keys(projectTaskObj);
+    }
     
     projectTaskListOfKeys.forEach(element => {
         let task = projectTaskObj[element];
-        const taskComponent = createTaskComponent(task, element);
+        const taskComponent = createTaskComponent(task, element, projectId);
         taskListDiv.appendChild(taskComponent);
     });
 
@@ -64,16 +67,14 @@ export function populateTasks(projectId) {
     let newItem = taskListDiv;
     let oldItem = document.querySelector("#task-details")
 
-    
-
     replaceDomElements(parentNode, newItem, oldItem);
-
 }
 
 
 
-function createTaskComponent(task, taskIdNum) {
+export function createTaskComponent(task, taskIdNum, projectIdNum) {
     let taskComponent = new divComponent();
+
     taskComponent.dataset.taskId = taskIdNum
     taskComponent.classList.add("task");
 
@@ -91,19 +92,12 @@ function createTaskComponent(task, taskIdNum) {
 
     let dropDownDivElement = dropDownMenuDiv(optionsBtn);
 
-    
-    
-    
     radioBtn.textContent = task.completed == "true"?"✓":""
     taskTitle.textContent = task.title;
     taskDetail.textContent = task.detail;
     
     important.textContent = task.important == "true"?"⭐":"☆" 
 
-    
-    
-    
-    
     taskDetail.classList.add("detail");
 
     taskComponent.appendChild(radioBtn);
@@ -121,6 +115,7 @@ function createTaskComponent(task, taskIdNum) {
 
     taskComponent.appendChild(important);
     taskComponent.appendChild(dropDownDivElement);
+    taskComponent.dataset.ProjectId = projectIdNum;
 
     return taskComponent;
 }

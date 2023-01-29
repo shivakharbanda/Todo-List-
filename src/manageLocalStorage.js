@@ -1,5 +1,7 @@
 // this code is to create and edit projects in local stroage
 
+
+
 export function setupProjectDict() {
     if (fetchProjects() == null) {
         localStorage.setItem("projects", "{}");
@@ -176,6 +178,21 @@ export function toggleImportant(projectID, taskID) {
     }
     updateLocalStroageProjectDict(projectObj);
     return true
+}
+
+export function getAllTasks() {
+    debugger
+    let taskList = [];
+    let projectObj = stringToObject(fetchProjects());
+
+    Object.keys(projectObj).forEach(project => {
+        console.log(project)
+        Object.keys(projectObj[project]["tasks"]).forEach(task => {
+            taskList.push();
+        })
+    })
+
+    return taskList;
 }
 // this code is to convert string to obj and obj to string
 

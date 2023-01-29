@@ -3,17 +3,33 @@ import sidebarTemplate, { addProjectBtn } from "./sidebar";
 import genericMain from "./genericMainComponent";
 
 import addTaskBox, { editTaskBox } from "./addTaskBox";
-import { appendTask, createTask, populateTasks } from "./task";
+import { appendTask, CreateAndReplaceTaskComponent, createTask, createTaskComponent, populateTasksOfProject } from "./task";
 import { divComponent, getCurrentProjectId, headComponent, heading1, svg, validateForm } from "./additional";
 import addNewProjectBox from "./addNewProjectBox";
-import { addTaskToProject, appendToProjectsDict, createProject, deleteProjectItem, deleteTask, editKey, fetchProjects, getProjectIdByName, getProjectListObj, getProjectNameById, toggleCompleted, toggleImportant, updateTaskById } from "./manageLocalStorage";
+import { addTaskToProject, appendToProjectsDict, createProject, deleteProjectItem, deleteTask, editKey, fetchProjects, getAllTasks, getProjectIdByName, getProjectListObj, getProjectNameById, stringToObject, toggleCompleted, toggleImportant, updateTaskById } from "./manageLocalStorage";
 import project_icon  from './static/svg/project-icon.svg';
 import delete_svg from './static/svg/trash-fill.svg';
 import edit_svg from './static/svg/pencil-square.svg'; 
 import enter_svg from './static/svg/enter_svg.svg'; 
 import cancel_svg from './static/svg/cancel_svg.svg';
 
+function populateAllTasksOfProject() {
+    let projectObj = stringToObject(fetchProjects());
 
+    let taskComponent = document.getElementById("task-details")
+
+    taskComponent.textContent = ""
+
+    Object.keys(projectObj).forEach(projectId => {
+        Object.keys(projectObj[projectId]["tasks"]).forEach(taskId => {
+            let task = projectObj[projectId]["tasks"][taskId];
+
+            let taskBox = createTaskComponent(task, taskId, projectId);
+            taskComponent.appendChild(taskBox)
+
+        })
+    })
+}
 
 export function generateUi(parent, tab_name) {
 
@@ -56,8 +72,17 @@ export function eventListeners() {
             let taskID = selectedBtn.parentElement.dataset.taskId 
             let projectID = getActiveProjectId();
 
-            if (toggleCompleted(projectID, taskID)) {
-                populateTasks(projectID);
+            if (projectID == "undefined") {
+                debugger;
+                projectID = event.target.parentNode.dataset.ProjectId;
+                toggleCompleted(projectID, taskID)
+                let tabName = document.getElementById("content-heading") 
+                if (tabName.textContent == "All Tasks") {
+                    populateAllTasksOfProject();
+                }
+                
+            } else if (toggleCompleted(projectID, taskID)) {
+                populateTasksOfProject(projectID);
             };
             
         }
@@ -66,8 +91,17 @@ export function eventListeners() {
             let taskID = selectedBtn.parentElement.dataset.taskId 
             let projectID = getActiveProjectId();
 
-            if (toggleImportant(projectID, taskID)) {
-                populateTasks(projectID);
+            if (projectID == "undefined") {
+                debugger;
+                projectID = event.target.parentNode.dataset.ProjectId;
+                toggleImportant(projectID, taskID);
+                let tabName = document.getElementById("content-heading") 
+                if (tabName.textContent == "All Tasks") {
+                    populateAllTasksOfProject();
+                }
+                
+            } else if (toggleImportant(projectID, taskID)) {
+                populateTasksOfProject(projectID);
             };
             
         }
@@ -79,7 +113,7 @@ export function eventListeners() {
             updateContentBar(event.target.dataset.value, event.target.dataset.projectId);
             if (event.target.dataset.type == "project"){
                 
-                populateTasks(event.target.dataset.projectId)
+                populateTasksOfProject(event.target.dataset.projectId)
                 
                 
 
@@ -132,7 +166,11 @@ export function eventListeners() {
                     }); 
             
                 }); 
-            };
+            }
+            if (event.target.classList.contains("all-task") && !event.target.classList.contains("sidebar-project-tab") ) {
+                populateAllTasksOfProject()
+            }
+            
         } 
         if (event.target.classList.contains("addNewProject")) {
             let addNewProject = addNewProjectBox();
@@ -186,6 +224,7 @@ export function populateProjectsTab(){
         projectItem.textContent = getProjectNameById(projectList[i]);
         projectItem.classList.add("all-task");
         projectItem.classList.add("sidebar-home-tab");
+        projectItem.classList.add("sidebar-project-tab");
         projectItem.dataset.projectId = projectList[i];
         projectItem.dataset.value = getProjectNameById(projectList[i]);
         projectItem.dataset.type = "project";
@@ -410,7 +449,7 @@ export function performAction(taskId, action) {
            
             updateTaskById(projectId, taskId, task);
             
-            populateTasks(projectId);
+            populateTasksOfProject(projectId);
             document.querySelector(".outside-box").remove()
         })
 }

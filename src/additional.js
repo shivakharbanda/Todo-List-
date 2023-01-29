@@ -1,5 +1,5 @@
 import { performAction } from "./displayController";
-import { populateTasks } from "./task";
+import { populateTasksOfProject } from "./task";
 
 export class divComponent {
     constructor  () {
@@ -153,7 +153,7 @@ export function dropDownMenuDiv(dropbtnElement) {
                 let action = event.target.id;
                 performAction(selectedTaskId, action);
                 let currentProjectId = getCurrentProjectId()
-                populateTasks(currentProjectId)
+                populateTasksOfProject(currentProjectId)
                 
 
             })
