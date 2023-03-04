@@ -20,6 +20,7 @@ export function createProject(projectName) {
     }
 
 }
+
 export function getProjectNameById(projectId) {
     let projectObj = stringToObject(fetchProjects());
 
@@ -181,7 +182,6 @@ export function toggleImportant(projectID, taskID) {
 }
 
 export function getAllTasks() {
-    debugger
     let taskList = [];
     let projectObj = stringToObject(fetchProjects());
 

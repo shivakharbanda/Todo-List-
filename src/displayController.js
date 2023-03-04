@@ -13,22 +13,31 @@ import edit_svg from './static/svg/pencil-square.svg';
 import enter_svg from './static/svg/enter_svg.svg'; 
 import cancel_svg from './static/svg/cancel_svg.svg';
 
-function populateAllTasksOfProject() {
+export function populateAllTasksOfProject() {
     let projectObj = stringToObject(fetchProjects());
 
-    let taskComponent = document.getElementById("task-details")
+    // let taskComponent = document.getElementById("task-details")
 
-    taskComponent.textContent = ""
+    let taskComponent = new divComponent();
 
-    Object.keys(projectObj).forEach(projectId => {
-        Object.keys(projectObj[projectId]["tasks"]).forEach(taskId => {
-            let task = projectObj[projectId]["tasks"][taskId];
-
-            let taskBox = createTaskComponent(task, taskId, projectId);
-            taskComponent.appendChild(taskBox)
-
+    taskComponent.id = "task-details";
+    taskComponent.classList.add("tasks-div");
+    try {
+        Object.keys(projectObj).forEach(projectId => {
+            Object.keys(projectObj[projectId]["tasks"]).forEach(taskId => {
+                let task = projectObj[projectId]["tasks"][taskId];
+    
+                let taskBox = createTaskComponent(task, taskId, projectId);
+                taskComponent.appendChild(taskBox)
+    
+            })
         })
-    })
+    } catch (TypeError) {
+        return taskComponent;
+    }
+    
+
+    return taskComponent;
 }
 
 export function generateUi(parent, tab_name) {
@@ -72,13 +81,14 @@ export function eventListeners() {
             let taskID = selectedBtn.parentElement.dataset.taskId 
             let projectID = getActiveProjectId();
 
-            if (projectID == "undefined") {
-                debugger;
+            if (projectID == undefined) {
                 projectID = event.target.parentNode.dataset.ProjectId;
                 toggleCompleted(projectID, taskID)
                 let tabName = document.getElementById("content-heading") 
                 if (tabName.textContent == "All Tasks") {
-                    populateAllTasksOfProject();
+
+                    let taskComponent = populateAllTasksOfProject();
+                    replaceDomElements(document.getElementsByClassName("main-content"), taskComponent, document.getElementsByClassName("tasks-div"))
                 }
                 
             } else if (toggleCompleted(projectID, taskID)) {
@@ -91,13 +101,13 @@ export function eventListeners() {
             let taskID = selectedBtn.parentElement.dataset.taskId 
             let projectID = getActiveProjectId();
 
-            if (projectID == "undefined") {
-                debugger;
+            if (projectID == undefined) {
                 projectID = event.target.parentNode.dataset.ProjectId;
                 toggleImportant(projectID, taskID);
                 let tabName = document.getElementById("content-heading") 
                 if (tabName.textContent == "All Tasks") {
-                    populateAllTasksOfProject();
+                    let taskComponent = populateAllTasksOfProject();
+                    replaceDomElements(document.getElementsByClassName("main-content"), taskComponent, document.getElementsByClassName("tasks-div"))
                 }
                 
             } else if (toggleImportant(projectID, taskID)) {
@@ -143,6 +153,8 @@ export function eventListeners() {
                             let projectName = event.target.parentNode.dataset.projectName;
                             let title = document.querySelector("#title").value;
                             let date = document.querySelector("#date").value;
+
+                            date = date.replace(/-/g, "/");
                             let detail = document.querySelector("#detail").value;
                             let important = document.querySelector("#impBtn").dataset.value;
                             let project="default";
@@ -391,10 +403,20 @@ function editBox(oldKey) {
 
 }
 
-export function replaceDomElements(parent, newItem, oldItem){
-    parent.replaceChild(newItem, oldItem);
 
-}
+
+export function replaceDomElements(parent, newItem, oldItem) {
+    if (oldItem instanceof HTMLCollection) {
+      oldItem = oldItem[0];
+    }
+
+    if (parent instanceof HTMLCollection) {
+        parent = parent[0];
+      }
+    
+    parent.replaceChild(newItem, oldItem);
+  }
+  
 
 function getActiveProjectId() {
     return document.getElementById("content-heading").dataset.projectId

@@ -95,6 +95,10 @@ export function createTaskComponent(task, taskIdNum, projectIdNum) {
     radioBtn.textContent = task.completed == "true"?"✓":""
     taskTitle.textContent = task.title;
     taskDetail.textContent = task.detail;
+
+    if (task.completed == "true") {
+        taskComponent.classList.add("completed");
+    }
     
     important.textContent = task.important == "true"?"⭐":"☆" 
 
@@ -131,7 +135,6 @@ function noDueDateDiv() {
 }
 
 function createDate(dateDue) {
-    let dueDate = (dateDue).split("-")
-    dueDate = format(new Date(dueDate[2], dueDate[1], dueDate[0]), 'dd-MM-yyyy');
-    return dueDate;
+    
+    return dateDue;
 }
