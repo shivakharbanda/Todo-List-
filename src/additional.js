@@ -152,7 +152,7 @@ export function dropDownMenuDiv(dropbtnElement) {
                 let selectedTaskId = event.target.parentElement.parentElement.parentElement.dataset.taskId ;
                 let action = event.target.id;
                 performAction(selectedTaskId, action);
-                let currentProjectId = getCurrentProjectId()
+                let currentProjectId = getCurrentProjectId(event.target)
                 populateTasksOfProject(currentProjectId)
                 
 
@@ -166,7 +166,7 @@ export function dropDownMenuDiv(dropbtnElement) {
     return dropDownDiv
 }
 
-export function getCurrentProjectId() {
-    return document.getElementById("content-heading").dataset.projectId ;
+export function getCurrentProjectId(selectedDiv) {
+    return selectedDiv.parentElement.dataset.ProjectId ;
     
 }
